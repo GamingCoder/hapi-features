@@ -1,0 +1,25 @@
+{
+  "name": "hapi-features",
+  "version": "1.0.0",
+  "description": "Simple feature management for hapi.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GamingCoder/hapi-features.git"
+  },
+  "keywords": [
+    "hapi",
+    "features",
+    "server",
+    "dev"
+  ],
+  "author": "Tobias Meyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GamingCoder/hapi-features/issues"
+  },
+  "homepage": "https://github.com/GamingCoder/hapi-features"
+}
