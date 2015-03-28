@@ -24,6 +24,7 @@
   "homepage": "https://github.com/GamingCoder/hapi-features",
   "devDependencies": {
     "expect.js": "^0.3.1",
+    "hapi": "^8.4.0",
     "mocha": "^2.2.1"
   }
 }
