@@ -20,7 +20,7 @@ describe('compute.js', function() {
 		}
 		expect(compute(conf)).to.eql(expected);
 	});
-	it('should only activate features only when required features are active', function() {
+	it('should support dependencies', function() {
 		conf = {
 			"feature_a": true,
 			"feature_b": false,
@@ -58,6 +58,68 @@ describe('compute.js', function() {
 			"false_dep_b": false,
 			"true_dep_ab": false,
 			"false_dep_ab": false
+		}
+		expect(compute(conf)).to.eql(expected);
+	});
+	it('should supported nested dependencies', function() {
+		conf = {
+			"feature_a": true,
+			"feature_b": false,
+			"true_dep_a": {
+				"active": true,
+				"required": ['feature_a']
+			},
+			"true_dep_b": {
+				"active": true,
+				"required": ['feature_b']
+			},
+			"a_dep_a": {
+				"active" : true,
+				"required": ['feature_a', "true_dep_a"]
+			},
+			"a_dep_b": {
+				"active" : true,
+				"required": ['feature_a', "true_dep_b"]
+			}
+		}
+		expected = {
+			"feature_a": true,
+			"feature_b": false,
+			"true_dep_a": true,
+			"true_dep_b": false,
+			"a_dep_a": true,
+			"a_dep_b": false
+		}
+		expect(compute(conf)).to.eql(expected);
+	});
+	it('should not be order dependent', function() {
+		conf = {
+			"feature_a": true,
+			"a_dep_a": {
+				"active" : true,
+				"required": ['feature_a', "true_dep_a"]
+			},
+			"true_dep_a": {
+				"active": true,
+				"required": ['feature_a']
+			},
+			"a_dep_b": {
+				"active" : true,
+				"required": ['feature_a', "true_dep_b"]
+			},
+			"true_dep_b": {
+				"active": true,
+				"required": ['feature_b']
+			},
+			"feature_b": false,
+		}
+		expected = {
+			"feature_a": true,
+			"feature_b": false,
+			"true_dep_a": true,
+			"true_dep_b": false,
+			"a_dep_a": true,
+			"a_dep_b": false
 		}
 		expect(compute(conf)).to.eql(expected);
 	});

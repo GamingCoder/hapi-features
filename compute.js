@@ -16,10 +16,12 @@ module.exports = function(conf) {
 					conf[name] = false
 				} else {
 					depsActive = true;
+					depsResolved = true;
 					for (dep in val.required){
 						if (conf[val.required[dep]] !== true) depsActive = false;
+						if (typeof conf[val.required[dep]] === 'object') depsResolved = false;
 					}
-					conf[name] = depsActive;
+					if (depsResolved) conf[name] = depsActive;
 				}
 			}
 		}
