@@ -14,6 +14,10 @@ server.register({
 	options: {"feature_a":true, "feature_b":false}
 }, function(err) {});
 ```
+To update features while the server is running call the `updateFeatures(features)` methods
+```javascript
+server.methods.updateFeatures({"new_conf": true});
+```
 
 ## Configuration
 ### Simple true/false
