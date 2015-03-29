@@ -1,9 +1,11 @@
 exports.register = function (server, options, next) {
-	features = require('./compute')(options);
+	server.plugins.features = require('./compute')(options);
+	
 	server.ext('onRequest', function(request, reply) {
-		request.plugins.features = features;
+		request.plugins.features = server.plugins.features;
 		return reply.continue();
 	});
+    
     next();
 }
 
