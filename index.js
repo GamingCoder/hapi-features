@@ -5,6 +5,10 @@ exports.register = function (server, options, next) {
 		request.plugins.features = server.plugins.features;
 		return reply.continue();
 	});
+
+	server.method('updateFeatures', function(conf) {
+		server.plugins.features = require('./compute')(conf);	
+	});
     
     next();
 }

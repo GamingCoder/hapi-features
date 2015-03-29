@@ -2,7 +2,6 @@ var expect = require('expect.js');
 var Hapi = require('hapi');
 
 var index = require('../index');
-var conf = {"feature_a":true,"a_dep_a":{"active":true,"required":["feature_a","true_dep_a"]},"true_dep_a":{"active":true,"required":["feature_a"]},"a_dep_b":{"active":true,"required":["feature_a","true_dep_b"]},"true_dep_b":{"active":true,"required":["feature_b"]},"feature_b":false}
 var expected = {"feature_a":true,"feature_b":false,"true_dep_a":true,"true_dep_b":false,"a_dep_a":true,"a_dep_b":false};
 var server;
 
@@ -18,7 +17,7 @@ describe('plugin', function() {
 		server.connection({ labels: ['api'] });
 		server.register({
 			register: index,
-			options: conf
+			options: {"feature_a":true,"a_dep_a":{"active":true,"required":["feature_a","true_dep_a"]},"true_dep_a":{"active":true,"required":["feature_a"]},"a_dep_b":{"active":true,"required":["feature_a","true_dep_b"]},"true_dep_b":{"active":true,"required":["feature_b"]},"feature_b":false}
 		}, function(err) {
 			expect(err).to.be.a('undefined');
 			server.route({
@@ -38,6 +37,20 @@ describe('plugin', function() {
 		server.inject(request, function(res) {
 			expect(res.result).to.eql(expected);
 			done();
+		});
+	});
+	describe('updateFeatures method', function() {
+		it('should be added', function() {
+			expect(typeof server.methods.updateFeatures).to.eql('function');
+		});
+		it('should update features', function() {
+			var conf2 = {"feature_a":false,"a_dep_a":{"active":true,"required":["feature_a","true_dep_a"]},"true_dep_a":{"active":true,"required":["feature_a"]},"a_dep_b":{"active":true,"required":["feature_a","true_dep_b"]},"true_dep_b":{"active":true,"required":["feature_b"]},"feature_b":false};
+			var expected2 = expected;
+			expected2.feature_a = false;
+			expected2.a_dep_a = false;
+			expected2.true_dep_a = false;
+			server.methods.updateFeatures(conf2);
+			expect(server.plugins.features).to.eql(expected2);
 		});
 	});
 });
